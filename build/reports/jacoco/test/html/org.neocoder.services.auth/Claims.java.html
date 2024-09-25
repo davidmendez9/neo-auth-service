@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Claims.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">neo-auth-service</a> &gt; <a href="index.source.html" class="el_package">org.neocoder.services.auth</a> &gt; <span class="el_source">Claims.java</span></div><h1>Claims.java</h1><pre class="source lang-java linenums">package org.neocoder.services.auth;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class Claims {
+
+    /**
+     * Expiration time of the token (in epoch seconds).
+     */
+    @JsonProperty(&quot;exp&quot;)
+    private long exp;
+
+    /**
+     * The time at which the token was issued (in epoch seconds).
+     */
+    @JsonProperty(&quot;iat&quot;)
+    private long iat;
+
+    /**
+     * The issuer of the token.
+     */
+    @JsonProperty(&quot;iss&quot;)
+    private String iss;
+
+    /**
+     * The username associated with the token.
+     */
+    @JsonProperty
+    private String username;
+
+    /**
+     * The roles assigned to the token.
+     */
+    @JsonProperty
+    private List&lt;String&gt; roles;
+
+<span class="nc" id="L42">    public Claims() {</span>
+<span class="nc" id="L43">    }</span>
+
+<span class="fc" id="L45">    public Claims(long exp, long iat, String iss, String username, List&lt;String&gt; roles) {</span>
+<span class="fc" id="L46">        this.exp = exp;</span>
+<span class="fc" id="L47">        this.iat = iat;</span>
+<span class="fc" id="L48">        this.iss = iss;</span>
+<span class="fc" id="L49">        this.username = username;</span>
+<span class="fc" id="L50">        this.roles = roles;</span>
+<span class="fc" id="L51">    }</span>
+
+    // Getters and Setters
+
+    public long getExp() {
+<span class="nc" id="L56">        return exp;</span>
+    }
+
+    public void setExp(long exp) {
+<span class="nc" id="L60">        this.exp = exp;</span>
+<span class="nc" id="L61">    }</span>
+
+    public long getIat() {
+<span class="nc" id="L64">        return iat;</span>
+    }
+
+    public void setIat(long iat) {
+<span class="nc" id="L68">        this.iat = iat;</span>
+<span class="nc" id="L69">    }</span>
+
+    public String getIss() {
+<span class="fc" id="L72">        return iss;</span>
+    }
+
+    public void setIss(String iss) {
+<span class="nc" id="L76">        this.iss = iss;</span>
+<span class="nc" id="L77">    }</span>
+
+    public String getUsername() {
+<span class="fc" id="L80">        return username;</span>
+    }
+
+    public void setUsername(String username) {
+<span class="nc" id="L84">        this.username = username;</span>
+<span class="nc" id="L85">    }</span>
+
+    public List&lt;String&gt; getRoles() {
+<span class="fc" id="L88">        return roles;</span>
+    }
+
+    public void setRoles(List&lt;String&gt; roles) {
+<span class="nc" id="L92">        this.roles = roles;</span>
+<span class="nc" id="L93">    }</span>
+
+    // Methods
+
+    /**
+     * Checks if the token has expired.
+     *
+     * @return {@code true} if the token is expired, otherwise {@code false}.
+     */
+    public boolean isExpired() {
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        return exp &lt; Instant.now().getEpochSecond();</span>
+    }
+
+    /**
+     * Checks if the token was issued by the given issuer.
+     *
+     * @param issuer the issuer to check against.
+     * @return {@code true} if the token was issued by the given issuer, otherwise
+     *         {@code false}.
+     */
+    public boolean isIssuedBy(String issuer) {
+<span class="fc" id="L114">        return this.iss.equals(issuer);</span>
+    }
+
+    /**
+     * Checks if the token was issued for the given username.
+     *
+     * @param user the username to check against.
+     * @return {@code true} if the token was issued for the given user, otherwise
+     *         {@code false}.
+     */
+    public boolean isIssuedFor(String user) {
+<span class="fc" id="L125">        return this.username.equals(user);</span>
+    }
+
+    /**
+     * Checks if the token has the given role.
+     *
+     * @param role the role to check against.
+     * @return {@code true} if the token contains the given role, otherwise
+     *         {@code false}.
+     */
+    public boolean hasRole(String role) {
+<span class="fc" id="L136">        return roles.contains(role);</span>
+    }
+
+    /**
+     * Deserializes a JSON string to a {@code Claims} object.
+     *
+     * @param json the JSON string representing a {@code Claims} object.
+     * @return the {@code Claims} object deserialized from the JSON string.
+     * @throws IOException if there is an error during deserialization.
+     */
+    public static Claims fromJson(String json) throws IOException {
+<span class="nc" id="L147">        ObjectMapper objectMapper = new ObjectMapper();</span>
+<span class="nc" id="L148">        return objectMapper.readValue(json, Claims.class);</span>
+    }
+
+    /**
+     * Serializes the {@code Claims} object to a JSON string.
+     *
+     * @return a JSON string representation of the {@code Claims} object.
+     * @throws IOException if there is an error during serialization.
+     */
+    public String toJson() throws IOException {
+<span class="nc" id="L158">        ObjectMapper objectMapper = new ObjectMapper();</span>
+<span class="nc" id="L159">        return objectMapper.writeValueAsString(this);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

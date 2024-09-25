@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.neocoder.services.auth.TokenServiceTest$VerifyTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-09-16T14:40:22" hostname="Laptop-DMF" time="2.027">
+  <properties/>
+  <testcase name="testVerifyValidToken_ShouldReturnClaimsWithCorrectDetails()" classname="org.neocoder.services.auth.TokenServiceTest$VerifyTests" time="0.006"/>
+  <testcase name="testVerifyExpiredToken_ShouldThrowInvalidTokenException()" classname="org.neocoder.services.auth.TokenServiceTest$VerifyTests" time="2.019"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

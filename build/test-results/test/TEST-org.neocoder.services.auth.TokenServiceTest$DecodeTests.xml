@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.neocoder.services.auth.TokenServiceTest$DecodeTests" tests="2" skipped="0" failures="0" errors="0" timestamp="2024-09-16T14:40:24" hostname="Laptop-DMF" time="0.01">
+  <properties/>
+  <testcase name="testDecodeValidToken_ShouldReturnClaimsWithCorrectDetails()" classname="org.neocoder.services.auth.TokenServiceTest$DecodeTests" time="0.004"/>
+  <testcase name="testDecodeInvalidToken_ShouldThrowInvalidTokenException()" classname="org.neocoder.services.auth.TokenServiceTest$DecodeTests" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

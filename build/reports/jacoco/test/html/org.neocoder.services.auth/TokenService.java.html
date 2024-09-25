@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TokenService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">neo-auth-service</a> &gt; <a href="index.source.html" class="el_package">org.neocoder.services.auth</a> &gt; <span class="el_source">TokenService.java</span></div><h1>TokenService.java</h1><pre class="source lang-java linenums">package org.neocoder.services.auth;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+
+import org.neocoder.services.auth.exception.InvalidTokenException;
+
+public class TokenService {
+    private String secret;
+    private String issuer;
+    private int expTime;
+    private static final String USERNAME = &quot;username&quot;;
+    private static final String ROLES = &quot;roles&quot;;
+
+    /**
+     * Constructs a new {@code TokenService} with the given secret, issuer, and
+     * expiration time.
+     *
+     * @param secret  the secret key used for signing the token.
+     * @param issuer  the issuer of the token.
+     * @param expTime the expiration time of the token in seconds.
+     */
+<span class="fc" id="L29">    public TokenService(String secret, String issuer, int expTime) {</span>
+<span class="fc" id="L30">        this.secret = secret;</span>
+<span class="fc" id="L31">        this.issuer = issuer;</span>
+<span class="fc" id="L32">        this.expTime = expTime;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Generates a JWT token for the specified user and roles.
+     *
+     * @param user  the username for whom the token is being generated.
+     * @param roles the roles assigned to the user.
+     * @return the generated JWT token as a {@code String}.
+     */
+    public String generate(String user, List&lt;String&gt; roles) {
+<span class="fc" id="L43">        Instant now = Instant.now();</span>
+<span class="fc" id="L44">        Algorithm algorithm = Algorithm.HMAC256(secret);</span>
+
+<span class="fc" id="L46">        return JWT.create()</span>
+<span class="fc" id="L47">                .withIssuer(issuer)</span>
+<span class="fc" id="L48">                .withIssuedAt(Date.from(now))</span>
+<span class="fc" id="L49">                .withExpiresAt(Date.from(now.plusSeconds(expTime)))</span>
+<span class="fc" id="L50">                .withClaim(USERNAME, user)</span>
+<span class="fc" id="L51">                .withClaim(ROLES, roles)</span>
+<span class="fc" id="L52">                .sign(algorithm);</span>
+    }
+
+    /**
+     * Decodes a JWT token into a {@code Claims} object.
+     *
+     * @param token the JWT token to decode.
+     * @return the decoded {@code Claims} object.
+     * @throws InvalidTokenException if the token is invalid or cannot be decoded.
+     */
+    public Claims decode(String token) throws InvalidTokenException {
+        try {
+<span class="fc" id="L64">            Algorithm algorithm = Algorithm.HMAC256(secret);</span>
+<span class="fc" id="L65">            JWTVerifier verifier = JWT.require(algorithm)</span>
+<span class="fc" id="L66">                    .build();</span>
+
+<span class="fc" id="L68">            DecodedJWT decodedJWT = verifier.verify(token);</span>
+
+<span class="fc" id="L70">            long exp = decodedJWT.getExpiresAt().getTime() / 1000; // Convert milliseconds to seconds</span>
+<span class="fc" id="L71">            long iat = decodedJWT.getIssuedAt().getTime() / 1000;</span>
+<span class="fc" id="L72">            String iss = decodedJWT.getIssuer();</span>
+<span class="fc" id="L73">            String username = decodedJWT.getClaim(USERNAME).asString();</span>
+<span class="fc" id="L74">            List&lt;String&gt; roles = decodedJWT.getClaim(ROLES).asList(String.class);</span>
+
+<span class="fc" id="L76">            return new Claims(exp, iat, iss, username, roles);</span>
+
+<span class="fc" id="L78">        } catch (Exception e) {</span>
+<span class="fc" id="L79">            throw new InvalidTokenException(&quot;Invalid JWT token&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Verifies the validity of a JWT token and returns its claims.
+     *
+     * @param token the JWT token to verify.
+     * @return the {@code Claims} object extracted from the verified token.
+     * @throws InvalidTokenException if the token is invalid, expired, or has an
+     *                               incorrect issuer.
+     */
+    public Claims verify(String token) throws InvalidTokenException {
+        try {
+<span class="fc" id="L93">            Algorithm algorithm = Algorithm.HMAC256(secret);</span>
+<span class="fc" id="L94">            JWTVerifier verifier = JWT.require(algorithm)</span>
+<span class="fc" id="L95">                    .build();</span>
+
+<span class="fc" id="L97">            DecodedJWT decodedJWT = verifier.verify(token);</span>
+
+<span class="fc" id="L99">            long exp = decodedJWT.getExpiresAt().getTime() / 1000; // Convert milliseconds to seconds</span>
+<span class="fc" id="L100">            long iat = decodedJWT.getIssuedAt().getTime() / 1000;</span>
+<span class="fc" id="L101">            String iss = decodedJWT.getIssuer();</span>
+<span class="fc" id="L102">            String username = decodedJWT.getClaim(USERNAME).asString();</span>
+<span class="fc" id="L103">            List&lt;String&gt; roles = decodedJWT.getClaim(ROLES).asList(String.class);</span>
+
+<span class="fc" id="L105">            Claims claims = new Claims(exp, iat, iss, username, roles);</span>
+
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            if (claims.isExpired()) {</span>
+<span class="nc" id="L108">                throw new InvalidTokenException(&quot;Token has expired&quot;);</span>
+            }
+
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">            if (!claims.isIssuedBy(iss)) {</span>
+<span class="nc" id="L112">                throw new InvalidTokenException(&quot;Invalid issuer&quot;);</span>
+            }
+
+<span class="fc" id="L115">            return claims;</span>
+<span class="fc" id="L116">        } catch (Exception e) {</span>
+<span class="fc" id="L117">            throw new InvalidTokenException(&quot;Invalid token&quot;, e);</span>
+        }
+    }
+
+    /**
+     * Refreshes the JWT token by generating a new one with the same user and roles.
+     *
+     * @param token the expired or soon-to-be-expired JWT token to refresh.
+     * @return a new JWT token as a {@code String}.
+     */
+    public String refresh(String token) {
+<span class="fc" id="L128">        Claims payload = verify(token);</span>
+<span class="fc" id="L129">        return generate(payload.getUsername(), payload.getRoles());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

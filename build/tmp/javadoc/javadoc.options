@@ -1,0 +1,10 @@
+-classpath '/home/david/Documentos/Projectos Java/neo-auth-service/packages/java/neo-auth-service/build/classes/java/main:/home/david/Documentos/Projectos Java/neo-auth-service/packages/java/neo-auth-service/build/resources/main:/home/david/.gradle/caches/modules-2/files-2.1/com.auth0/java-jwt/4.4.0/e02407d19971bfa241441212901dd327a37722b/java-jwt-4.4.0.jar:/home/david/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.15.0/12f334a1dc9c6d2854c43ae314024dde8b3ad572/jackson-core-2.15.0.jar:/home/david/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.15.0/89b0fd554928425a776a6e97ed010034312af21d/jackson-annotations-2.15.0.jar:/home/david/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.15.0/d41caa3a4e9f85382702a059a65c512f85ac230/jackson-databind-2.15.0.jar:/home/david/.gradle/caches/modules-2/files-2.1/org.mindrot/jbcrypt/0.4/af7e61017f73abb18ac4e036954f9f28c6366c07/jbcrypt-0.4.jar:/home/david/.gradle/caches/modules-2/files-2.1/ch.randelshofer/fastdoubleparser/0.8.0/85c25540369921659556ead85e02c99ef0d24280/fastdoubleparser-0.8.0.jar'
+-d '/home/david/Documentos/Projectos Java/neo-auth-service/packages/java/neo-auth-service/build/docs/javadoc'
+-doctitle 'neo-auth-service 1.0 API'
+-notimestamp 
+-quiet 
+-windowtitle 'neo-auth-service 1.0 API'
+'/home/david/Documentos/Projectos Java/neo-auth-service/packages/java/neo-auth-service/src/main/java/org/neocoder/services/auth/TokenService.java'
+'/home/david/Documentos/Projectos Java/neo-auth-service/packages/java/neo-auth-service/src/main/java/org/neocoder/services/auth/Claims.java'
+'/home/david/Documentos/Projectos Java/neo-auth-service/packages/java/neo-auth-service/src/main/java/org/neocoder/services/auth/exception/InvalidTokenException.java'
+'/home/david/Documentos/Projectos Java/neo-auth-service/packages/java/neo-auth-service/src/main/java/org/neocoder/services/auth/AuthService.java'
